@@ -76,6 +76,17 @@ public class UsuarioController {
 		return usuario;
 	}
 	
+	@GetMapping("/usuario/saul/{id}")
+	public EntityModel<Usuario> omar(@PathVariable("id") Integer id) throws Exception {
+		Usuario user = service.listarPorId(id);
+		if (user.getIdUsuario() == null) {
+			throw new ModeloNotFoundException("ID NO ENCONTRADO " + id);
+		}
+		EntityModel<Usuario> usuario = EntityModel.of(user);
+		WebMvcLinkBuilder userLink = linkTo(methodOn(this.getClass()).listarPorId(id));
+		usuario.add(userLink.withRel(("recurso-usuario")));
+		return usuario;
+	}
 	@PostMapping
 	public ResponseEntity<Usuario> registrar(
 			@RequestHeader(name = "Authorization", required = true) String authorization,
